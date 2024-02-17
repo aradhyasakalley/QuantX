@@ -1,45 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     View,
     ScrollView,
     Text,
-    Switch,
     TextInput,
     TouchableOpacity
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { Colors, Typography } from '../../styles';
 import { insertTransaction, updateTransaction } from '../../dbHelpers/transactionHelper';
 
-import { categories } from '../../utils/categories';
-
 import BackHeader from '../../components/Headers/BackHeader';
 import Button from '../../components/Button';
 
-const AddTransaction = ({navigation, route}) => {
-    const [category, setCategory] = useState();
-    const [income, setIncome] = useState(false);
+import { stocks } from '../../utils/categories';
+const AddTransaction = ({ navigation, route }) => {
+    const [stock, setStock] = useState(stocks[0]);
+    const [isBuying, setIsBuying] = useState(true);
     const [showDate, setShowDate] = useState(false);
     const [date, setDate] = useState(new Date());
     const [amount, setAmount] = useState('');
+    const [totalBuyingPrice, setTotalBuyingPrice] = useState(0);
 
     useEffect(() => {
         if (route.params?.item) {
-            setCategory({name: route.params.item.category, icon: route.params.item.icon});
+            const selectedStock = stocks.find(stock => stock.symbol === route.params.item.stock.symbol);
+            setStock(selectedStock || stocks[0]);
             setDate(new Date(route.params.item.transaction_date));
             setAmount((route.params.item.amount).toString());
-            setIncome(route.params.item.type == 'income' ? false : true);
-        }
-        else {
-            setCategory(categories[0]); // Set the first category as a default category
+            setIsBuying(route.params.item.type === 'buy' ? true : false);
         }
     }, []);
-
-    // Toggle Income / Expense Switch
-    const toggleIncomeSwitch = () => setIncome(previousState => !previousState);
 
     // Change Date
     const onChangeDate = (event, selectedDate) => {
@@ -48,28 +42,57 @@ const AddTransaction = ({navigation, route}) => {
         setDate(currentDate);
     }
 
+    // Calculate Total Buying Price
+    useEffect(() => {
+        const amountFloat = parseFloat(amount);
+        const priceFloat = parseFloat(stock.price);
+        if (!isNaN(amountFloat) && !isNaN(priceFloat) && amountFloat > 0) {
+            setTotalBuyingPrice(amountFloat * priceFloat);
+        } else {
+            setTotalBuyingPrice(0);
+        }
+    }, [amount, stock]);
+
     // Insert Transaction
     const __insert = () => {
         const stringDate = date.toLocaleDateString();
+        const transactionAmount = parseFloat(amount);
+        const type = isBuying ? 'buy' : 'sell';
+        const updatedStock = { ...stock };
+        if (!isBuying) {
+            updatedStock.amount += transactionAmount;
+        } else {
+            updatedStock.amount -= transactionAmount;
+        }
         insertTransaction({
-            category: category.name,
-            icon: category.icon,
+            category: stock.name,
+            icon: stock.icon,
             date: stringDate,
-            amount: parseFloat(amount),
-            type: income ? 'expense' : 'income'
+            amount: transactionAmount,
+            type: type,
+            stock: updatedStock
         });
     }
 
     // Update Transaction
     const __update = () => {
         const stringDate = date.toLocaleDateString();
+        const transactionAmount = parseFloat(amount);
+        const type = isBuying ? 'buy' : 'sell';
+        const updatedStock = { ...stock };
+        if (!isBuying) {
+            updatedStock.amount += transactionAmount;
+        } else {
+            updatedStock.amount -= transactionAmount;
+        }
         updateTransaction({
             id: route.params.item.id,
-            category: category.name,
-            icon: category.icon,
+            category: stock.name,
+            icon: stock.icon,
             date: stringDate,
-            amount: parseFloat(amount),
-            type: income ? 'expense' : 'income'
+            amount: transactionAmount,
+            type: type,
+            stock: updatedStock
         });
     }
 
@@ -77,8 +100,7 @@ const AddTransaction = ({navigation, route}) => {
     const __save = () => {
         if (route.params?.item) {
             __update();
-        }
-        else {
+        } else {
             __insert();
         }
         navigation.goBack();
@@ -91,44 +113,43 @@ const AddTransaction = ({navigation, route}) => {
 
             {/* Body */}
             <ScrollView style={styles.bodyContainer} showsVerticalScrollIndicator={false}>
-                {/* Category */}
+                {/* Stock */}
                 <View style={styles.inputContainer}>
-                    <Text style={[Typography.TAGLINE, {color: Colors.GRAY_DARK}]}>Category</Text>
+                    <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Stock</Text>
                     <Picker
-                        selectedValue={category}
-                        onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
+                        selectedValue={stock}
+                        onValueChange={(itemValue, itemIndex) => setStock(itemValue)}
                         style={styles.input}
                         dropdownIconColor={Colors.GRAY_DARK}
-                        itemStyle={[Typography.BODY, {color: Colors.GRAY_DARK}]}>
-                            {categories.map((category, index) => (
-                                <Picker.Item key={index} label={category.name} value={category} />
-                            ))}
+                        itemStyle={[Typography.BODY, { color: Colors.GRAY_DARK }]}>
+                        {stocks.map((stockItem, index) => (
+                            <Picker.Item key={index} label={stockItem.name} value={stockItem} />
+                        ))}
                     </Picker>
+                    <Text style={[Typography.BODY, { color: Colors.WHITE }]}>Price: {stock.price}</Text>
                 </View>
 
                 {/* Transaction type */}
-                <View style={styles.inputContainer}>
-                    <Text style={[Typography.TAGLINE, {color: Colors.GRAY_DARK}]}>Transaction type</Text>
-                    <View style={styles.rowContainer}>
-                        <Text style={[Typography.BODY, !income ? {color: Colors.PRIMARY} : {color: Colors.GRAY_DARK}]}>Income</Text>
-                        <Switch
-                            trackColor={{ false: Colors.WHITE, true: Colors.WHITE }}
-                            thumbColor={income ? Colors.PRIMARY : Colors.PRIMARY}
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleIncomeSwitch}
-                            value={income}
-                        />
-                        <Text style={[Typography.BODY, income ? {color: Colors.PRIMARY} : {color: Colors.GRAY_DARK}]}>Expense</Text>
-                    </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={[styles.button, isBuying ? styles.selectedButton : null]}
+                        onPress={() => setIsBuying(true)}>
+                        <Text style={[Typography.BODY, isBuying ? { color: Colors.WHITE } : { color: Colors.PRIMARY }]}>Buy</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, !isBuying ? styles.selectedButton : null]}
+                        onPress={() => setIsBuying(false)}>
+                        <Text style={[Typography.BODY, !isBuying ? { color: Colors.WHITE } : { color: Colors.PRIMARY }]}>Sell</Text>
+                    </TouchableOpacity>
                 </View>
 
                 {/* Date */}
                 <View style={styles.inputContainer}>
-                    <Text style={[Typography.TAGLINE, {color: Colors.GRAY_DARK}]}>Date</Text>
-                    <TouchableOpacity 
+                    <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Date</Text>
+                    <TouchableOpacity
                         onPress={() => setShowDate(true)}
-                        style={[styles.input, {paddingTop: 15, paddingBottom: 15}]}>
-                            <Text style={[Typography.BODY, {color: Colors.WHITE}]}>{date.toDateString()}</Text>
+                        style={[styles.input, { paddingTop: 15, paddingBottom: 15 }]}>
+                        <Text style={[Typography.BODY, { color: Colors.WHITE }]}>{date.toDateString()}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -144,7 +165,7 @@ const AddTransaction = ({navigation, route}) => {
 
                 {/* Amount */}
                 <View style={styles.inputContainer}>
-                    <Text style={[Typography.TAGLINE, {color: Colors.GRAY_DARK}]}>Amount</Text>
+                    <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Amount</Text>
                     <TextInput
                         value={amount}
                         placeholder='Exp: 20'
@@ -153,11 +174,17 @@ const AddTransaction = ({navigation, route}) => {
                         placeholderTextColor={Colors.GRAY_MEDIUM}
                         style={[styles.input, Typography.BODY]} />
                 </View>
+
+                {/* Total Buying Price */}
+                <View style={styles.inputContainer}>
+                    <Text style={[Typography.TAGLINE, { color: Colors.GRAY_DARK }]}>Total Buying Price</Text>
+                    <Text style={[Typography.BODY, { color: Colors.WHITE }]}>{totalBuyingPrice.toFixed(2)}</Text>
+                </View>
             </ScrollView>
 
             {/* Footer */}
             <View style={styles.footerContainer}>
-                <Button 
+                <Button
                     title='Save'
                     onPress={() => __save()} />
             </View>
@@ -186,17 +213,27 @@ const styles = StyleSheet.create({
         color: Colors.WHITE,
         backgroundColor: Colors.LIGHT_BLACK
     },
-    rowContainer: {
-        marginTop: 10,
+    buttonContainer: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    button: {
+        flex: 1,
+        padding: 15,
+        marginHorizontal: 5,
+        borderRadius: 10,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'center',
+        backgroundColor: Colors.LIGHT_BLACK,
+    },
+    selectedButton: {
+        backgroundColor: Colors.PRIMARY,
     },
     // Footer
     footerContainer: {
         padding: 20,
     },
 });
- 
+
 export default AddTransaction;
- 

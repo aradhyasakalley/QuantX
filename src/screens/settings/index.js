@@ -119,16 +119,7 @@ const Settings = ({navigation}) => {
                         </View>
                     </View>
 
-                    {/* Privacy */}
-                    <View style={{marginTop: 20}}>
-                        <Text style={[Typography.TAGLINE, {color: Colors.GRAY_MEDIUM, marginBottom: 10}]}>More</Text>
-                        <View style={styles.blockContainer}>
-                            <Pressable style={styles.rowContainer} onPress={() => Linking.openURL('https://www.blaiti.com')}>
-                                <Text style={[Typography.BODY, {color: Colors.WHITE}]}>Developer</Text>
-                                <Text style={[Typography.TAGLINE, {color: Colors.GRAY_MEDIUM}]}>blaiti.com</Text>
-                            </Pressable>
-                        </View>
-                    </View>
+                   
 
                     {/* Sign out */}
                     <TouchableOpacity 

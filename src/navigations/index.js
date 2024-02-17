@@ -20,6 +20,7 @@ import AddTransaction from '../screens/transactions/add-transaction';
 import Splash from '../screens/splash';
 import GetStarted from '../screens/auth';
 import Login from '../screens/auth/login';
+import ViewStrategy from '../screens/moneybox/view-strategy';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -46,18 +47,18 @@ function MyTabs() {
                 name={routes.Transactions} 
                 component={Transactions}
                 options={{
-                    tabBarLabel: <Text style={[Typography.TAGLINE, {color: Colors.WHITE}]}>{routes.Transactions}</Text>,
+                    tabBarLabel: <Text style={[Typography.TAGLINE, {color: Colors.WHITE}]}>Orders</Text>,
                     tabBarIcon: ({ color }) => (
-                      <Icon name="repeat" color={color} size={23} />
+                      <Icon name="book" color={color} size={23} />
                     ),
                 }} />
                 <Tab.Screen 
                     name={routes.MoneyBox} 
                     component={MoneyBox}
                     options={{
-                        tabBarLabel: <Text style={[Typography.TAGLINE, {color: Colors.WHITE}]}>{routes.MoneyBox}</Text>,
+                        tabBarLabel: <Text style={[Typography.TAGLINE, {color: Colors.WHITE}]}>Portfolio</Text>,
                         tabBarIcon: ({ color }) => (
-                          <Icon name="gift" color={color} size={23} />
+                          <Icon name="credit-card" color={color} size={23} />
                         ),
                     }} />
             <Tab.Screen 
@@ -66,7 +67,7 @@ function MyTabs() {
                 options={{
                     tabBarLabel: <Text style={[Typography.TAGLINE, {color: Colors.WHITE}]}>{routes.Settings}</Text>,
                     tabBarIcon: ({ color }) => (
-                    <Icon name="settings" color={color} size={23} />
+                    <Icon name="user" color={color} size={23} />
                     ),
                 }} />
     </Tab.Navigator>
@@ -95,6 +96,7 @@ const RootNavigator = () => {
                 <Stack.Screen name={routes.Notifications} component={Notifications} />
                 <Stack.Screen name={routes.AddTransaction} component={AddTransaction} />
                 <Stack.Screen name={routes.AddMoneyBox} component={AddMoneyBox} />
+                <Stack.Screen name={routes.ViewStrategy} component={ViewStrategy} />
               </>
             }
           </Stack.Navigator>

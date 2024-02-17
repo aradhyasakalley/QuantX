@@ -24,11 +24,11 @@ const PieCard = (props) => {
             <View style={styles.numbersContainer}>
                 <View style={styles.rowContainer}>
                     <Icon name="circle" size={15} color={Colors.BLACK} />
-                    <Text style={[Typography.BODY, {marginLeft: 5, color: Colors.BLACK}]}>Payout({payoutPercent}%)</Text>
+                    <Text style={[Typography.BODY, {fontSize : 30,marginLeft: 5, color: Colors.BLACK}]}> + {payoutPercent}%</Text>
                 </View>
                 <View style={styles.rowContainer}>
                     <Icon name="circle" size={15} color={Colors.WHITE} />
-                    <Text style={[Typography.BODY, {marginLeft: 5, color: Colors.WHITE}]}>Saved ({savedPercent}%)</Text>
+                    <Text style={[Typography.BODY, {fontSize : 30,marginLeft: 5, color: Colors.WHITE}]}> - {savedPercent}%</Text>
                 </View>
             </View>
         </View>
@@ -40,15 +40,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 16,
         flexDirection: 'row',
-        backgroundColor: Colors.PRIMARY
+        backgroundColor: Colors.PRIMARY,
+        height : 200
     },
     pieContainer: {
-        padding: 15
+        padding: 15,
+        marginTop : 20,
+        marginLeft : 20
     },
     numbersContainer: {
         flex: 1,
         padding: 10,
-        paddingLeft: 0,
+        paddingLeft: 20,
         justifyContent: 'center'
     },
     rowContainer: {

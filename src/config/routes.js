@@ -14,6 +14,7 @@ const routes = {
   // MoneyBox
   MoneyBox: 'MoneyBox',
   AddMoneyBox: 'AddMoneyBox',
+  ViewStrategy : 'ViewStrategy',
   // Settings
   Settings: 'Settings'
 };
