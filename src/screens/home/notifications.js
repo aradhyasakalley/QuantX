@@ -7,12 +7,15 @@ import BackHeader from '../../components/Headers/BackHeader';
 const Notifications = ({ navigation }) => {
   // Dummy data for notifications
   const notifications = [
-    { id: '1', message: 'Bid successful for item XYZ.' },
-    { id: '2', message: 'New message from user ABC.' },
-    { id: '3', message: 'Your account has been credited.' },
-    { id: '4', message: 'Reminder: Event XYZ starts at 2 PM.' },
-    
-  ];
+    { id: '1', message: 'Dividend payout: MSFT $0.56/share.' },
+    { id: '2', message: 'Earnings report: GOOGL after market close.' },
+    { id: '3', message: 'Market alert: S&P 500 hits all-time high.' },
+    { id: '4', message: 'News: AAPL announces product launch.' },
+    { id: '5', message: 'Margin call: Add funds or close positions.' },
+    { id: '6', message: 'Alert: TSLA exceeds $1000/share.' },
+];
+
+
 
   return (
     <View style={styles.container}>

@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     height: 300,
-    backgroundColor: 'black',
+    backgroundColor: '#caf0f8',
     borderRadius: 20,
     marginVertical: 10,
     padding: 10,

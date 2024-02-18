@@ -19,8 +19,8 @@ const GetStarted = ({navigation, route}) => {
             <View style={styles.bodyContainer} >
                 <Image 
                     resizeMode='cover'
-                    style={{ width: 200, height: 200}}
-                    source={require('../../assets/images/logo.png')} />
+                    style={{ width: 500, height: 500}}
+                    source={require('../../assets/images/new.jpg')} />
                 
                 <Text style={[Typography.H3, styles.title]}>Welcome !</Text>
                 <Text style={[Typography.TAGLINE, styles.title, {marginTop: 10}]}>Explore the interactive, secure and fast money planner and tracker app with highly expected data privacy for every user.</Text>

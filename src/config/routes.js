@@ -11,10 +11,14 @@ const routes = {
   Income: 'Income',
   Expense: 'Expense',
   AddTransaction: 'AddTransaction',
+  BuyStock : 'BuyStock',
+  SellStock : 'SellStock',
   // MoneyBox
   MoneyBox: 'MoneyBox',
   AddMoneyBox: 'AddMoneyBox',
   ViewStrategy : 'ViewStrategy',
+  // News
+  News : 'News',
   // Settings
   Settings: 'Settings'
 };

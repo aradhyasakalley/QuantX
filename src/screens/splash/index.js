@@ -13,7 +13,7 @@ const Splash = () => {
             <Image 
                 resizeMode='cover'
                 style={{ width: 200, height: 200}}
-                source={require('../../assets/images/logo.png')} />
+                source={require('../../assets/images/log.png')} />
         </View>
     );
 };
