@@ -33,8 +33,8 @@
     <td>Notifications</td>
   </tr>
   <tr>
-    <td><img src="https://github.com/aradhyasakalley/QuantX/assets/102210237/da7bed10-c559-4600-acc5-2f3f820c1701" width=400 height=550></td>
-    <td><img src="https://github.com/aradhyasakalley/QuantX/assets/102210237/538653d2-f7e1-42ab-a958-f2116f88cdfb" width=400 height=550></td>
+    <td><img src="https://github.com/aradhyasakalley/QuantX/assets/102210237/da7bed10-c559-4600-acc5-2f3f820c1701" width=300 height=550></td>
+    <td><img src="https://github.com/aradhyasakalley/QuantX/assets/102210237/538653d2-f7e1-42ab-a958-f2116f88cdfb" width=300 height=550></td>
   </tr>
  </table>
 
